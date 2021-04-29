@@ -1,3 +1,4 @@
+
 import de.bezier.guido.*;
 //Declare and initialize constants NUM_ROWS and NUM_COLS = 20
 public final int NUM_ROWS = 50;
@@ -6,10 +7,10 @@ private Life[][] buttons; //2d array of Life buttons each representing one cell
 private boolean[][] buffer; //2d array of booleans to store state of buttons array
 private boolean running = true; //used to start and stop program
 public boolean on = true;
-
+int frame = 6;
 public void setup () {
   size(400, 400);
-  frameRate(6);
+  frameRate(frame);
   // make the manager
   Interactive.make( this );
 
