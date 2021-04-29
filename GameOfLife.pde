@@ -5,7 +5,7 @@ public final int NUM_COLS = 50;
 private Life[][] buttons; //2d array of Life buttons each representing one cell
 private boolean[][] buffer; //2d array of booleans to store state of buttons array
 private boolean running = true; //used to start and stop program
-public boolean one = true;
+public boolean on = true;
 
 public void setup () {
   size(400, 400);
@@ -44,30 +44,77 @@ public void draw () {
   copyFromButtonsToBuffer();
 
   //use nested loops to draw the buttons here
-
+  
+  for (int row = 0; row < NUM_ROWS; row++) {
+    for (int col = 0; col < NUM_COLS; col++) {
+      square(row, col, 20);
+    }
+  }
   copyFromBufferToButtons();
 }
 
 public void keyPressed() {
   //your code here
+  //slows down or speeds up program
+  if (keyCode == DOWN) {
+      frame--; 
+    }
+  if (keyCode == UP) {
+      frame++; 
+    }
+  if (frame > 0){
+     frameRate(frame);
+   }
+  if (key == ' ') {
+      on = !on; 
+    }
 }
 
 public void copyFromBufferToButtons() {
   //your code here
+  for (int r = 0; r < buffer.length; r++)
+  {
+    for (int c = 0; c < buffer[0].length; c++)
+    {
+      buttons[r][c].setLife(buffer[r][c]);
+    }
+  }
 }
 
 public void copyFromButtonsToBuffer() {
   //your code here
+  for (int r = 0; r < buffer.length; r++)
+  {
+    for (int c = 0; c < buffer[0].length; c++)
+    {
+      buffer[r][c] = buttons[r][c].getLife();
+    }
+  }
 }
 
 public boolean isValid(int r, int c) {
   //your code here
-  return false;
+  if (r >= 0 && r < NUM_ROWS && c >= 0 && c < NUM_COLS)
+    return true;
+  else
+    return false;
 }
 
 public int countNeighbors(int row, int col) {
   int neighbors = 0;
   //your code here
+  for (int r = row-1; r <= row+1;  r++){
+    for (int c = col-1; c <= col+1; c++){
+      if (isValid(r, c)){
+        if (buttons[r][c].getLife() == true){
+          neighbors += 1;
+        }
+      }
+    }
+  }
+  if (buttons[row][col].getLife()) {
+    neighbors--;
+  }
   return neighbors;
 }
 
@@ -101,5 +148,6 @@ public class Life {
   }
   public void setLife(boolean living) {
     //your code here
+    alive = living;
   }
 }
