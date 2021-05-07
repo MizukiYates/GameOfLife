@@ -1,4 +1,3 @@
-
 import de.bezier.guido.*;
 //Declare and initialize constants NUM_ROWS and NUM_COLS = 20
 public final int NUM_ROWS = 50;
@@ -6,10 +5,11 @@ public final int NUM_COLS = 50;
 private Life[][] buttons; //2d array of Life buttons each representing one cell
 private boolean[][] buffer; //2d array of booleans to store state of buttons array
 private boolean running = true; //used to start and stop program
-public boolean on = true;
-int frame = 6;
+int frame = 7;
+boolean on = true;
+
 public void setup () {
-  size(400, 400);
+  size(500, 500);
   frameRate(frame);
   // make the manager
   Interactive.make( this );
@@ -45,18 +45,33 @@ public void draw () {
   copyFromButtonsToBuffer();
 
   //use nested loops to draw the buttons here
-  
-  for (int row = 0; row < NUM_ROWS; row++) {
-    for (int col = 0; col < NUM_COLS; col++) {
-      square(row, col, 20);
+ if (on) {
+    for (int r = 0; r < buttons.length; r++)
+    {
+      for (int c = 0; c < buttons[0].length; c++)
+      {
+        if (countNeighbors(r, c) == 3)
+        {
+          buffer[r][c] = true;
+        }
+        else if (countNeighbors(r, c) == 2 && buttons[r][c].getLife())
+        {
+          buffer[r][c] = true;
+        }
+        else
+        {
+          buffer[r][c] = false;
+        }
+        buttons[r][c].draw();
+      }
     }
+    copyFromBufferToButtons();
   }
-  copyFromBufferToButtons();
 }
 
 public void keyPressed() {
   //your code here
-  //slows down or speeds up program
+  //slows down or speeds up game of life
   if (keyCode == DOWN) {
       frame--; 
     }
@@ -104,7 +119,7 @@ public boolean isValid(int r, int c) {
 public int countNeighbors(int row, int col) {
   int neighbors = 0;
   //your code here
-  for (int r = row-1; r <= row+1;  r++){
+   for (int r = row-1; r <= row+1;  r++){
     for (int c = col-1; c <= col+1; c++){
       if (isValid(r, c)){
         if (buttons[r][c].getLife() == true){
@@ -125,8 +140,8 @@ public class Life {
   private boolean alive;
 
   public Life (int row, int col) {
-    // width = 400/NUM_COLS;
-    // height = 400/NUM_ROWS;
+    width = 500/NUM_COLS;
+    height = 500/NUM_ROWS;
     myRow = row;
     myCol = col; 
     x = myCol*width;
@@ -139,13 +154,14 @@ public class Life {
   public void mousePressed () {
     alive = !alive; //turn cell on and off with mouse press
   }
-  public void draw () {    
-    fill(alive ? 200 : 100);
-    rect(x, y, width, height);
+  public void draw () {   
+    noStroke();
+    fill(alive ? 200 : 0);
+    rect((float)x,(float)y,(float)width,(float)height);
   }
   public boolean getLife() {
     //replace the code one line below with your code
-    return false;
+    return alive;
   }
   public void setLife(boolean living) {
     //your code here
